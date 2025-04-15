@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+/* Login Page Layout */
+.login-container {
+    display: flex;
+    width: 80%;
+    height: 95vh;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+/* Left Section */
+.left-section {
+    width: 50%;
+    background: linear-gradient(135deg, #71e48c, #28a745);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-section img {
+    width: 80%;
+    height: auto;
+}
+
+/* Right Section */
+.right-section {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-box {
+    width: 80%;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.input-box i {
+    margin-right: 8px;
+    color: #777;
+}
+
+input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #28a745;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+/* Google Login Button */
+.google-login {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.google-login img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+p {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+input, select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.register-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #28a745;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}

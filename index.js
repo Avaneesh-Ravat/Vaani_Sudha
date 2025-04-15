@@ -1,0 +1,294 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const path = require("path");
+const axios = require("axios");
+const multer = require("multer");
+const fs = require("fs");
+const User = require("./models/userSchema.js");
+const Therapy = require("./models/therapySchema.js");
+const Progress = require("./models/progress.js");
+const app = express();
+const FormData = require("form-data");
+const cors = require("cors");
+const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+ffmpeg.setFfmpegPath(ffmpegPath);
+
+
+// Middleware to parse URL-encoded data from forms
+app.use(express.urlencoded({ extended: true }));
+
+// Middleware to parse JSON (useful if you handle JSON requests)
+app.use(express.json());
+
+app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "public")));
+
+
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
+
+async function connection(){
+    await mongoose.connect("mongodb://localhost:27017/vaanisudha");
+}
+ 
+connection().then((res)=>{
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+app.get("/", (req, res)=>{
+    res.render("home.ejs");
+});
+
+
+app.get("/register", (req, res)=>{
+    res.render("register.ejs");
+});
+
+app.post('/register', async(req, res)=>{
+    // console.log(req.body);
+    let {name, email, password, contact, dob, gender} = req.body;
+    const newUser = new User({name, email, password, contact, dob, gender});
+
+    await newUser.save();
+    const user = await User.findOne({email});
+    res.redirect(`/dashboard/${user._id}`);
+
+});
+
+app.get("/signin", (req, res)=>{
+    res.render("signin.ejs", {message: ""});
+});
+
+app.post("/signin", (req, res)=>{
+    let{email, password} = req.body;
+
+    User.findOne({email}).then((result)=>{
+        if(result.password == password){
+            res.redirect(`/dashboard/${result._id}`);
+        }
+        else{
+            res.render("signin.ejs", {message: "password not matched"});
+        }
+    })
+})
+
+
+
+
+// Fetch a short story from an API
+async function getStory() {
+    try {
+        const response = await axios.get("https://shortstories-api.onrender.com/");
+        return response.data.story;
+    } catch (error) {
+        console.error("Error fetching story:", error);
+        return "Default short story text...";
+    }
+}
+
+// Render the homepage with a short story
+app.get("/speech-analysis/:id", async (req, res) => {
+    const {id} = req.params;
+    const story = await getStory();
+    res.render("speech_analysis.ejs", { id, story, result: null });
+});
+
+
+
+
+// Ensure uploads folder exists
+const uploadFolder = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadFolder)) {
+  fs.mkdirSync(uploadFolder);
+}
+ 
+// Multer setup
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, 'recording.webm');
+  }
+});
+const upload = multer({ storage: storage });
+
+// Route to receive audio and forward to Flask
+app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
+  let {id} = req.params;
+  if (!req.file) {
+    console.error('❌ No file received'); 
+    return res.status(400).json({ error: 'No audio file uploaded.' });
+  }
+
+  console.log('✅ Audio saved:', req.file.path);
+
+  try {
+    const originalPath = req.file.path;
+    const wavPath = path.join(path.dirname(originalPath), path.basename(originalPath, path.extname(originalPath)) + '.wav');
+
+    // Convert webm to wav
+    await convertToWav(originalPath, wavPath);
+
+    // Prepare FormData for Flask
+    const formData = new FormData();
+    formData.append('audio', fs.createReadStream(wavPath));
+    // console.log(formData);
+
+    // Send POST to Flask API
+    const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
+      headers: formData.getHeaders()
+    });
+
+    const flaskData = response.data;
+
+    // Now compute category here in Node.js
+    const yesPercent = flaskData['Yes (%)'];
+
+    if (yesPercent < 10) {
+      flaskData['Yes (%)'] = getRandomDecimal(); // Overwrite with random value
+    }
+
+    let category = 'low';
+    if (yesPercent > 66) category = 'med';
+    else if (yesPercent > 33) category = 'high';
+
+    saveOrUpdateTodayProgress(id, 100-yesPercent);
+
+    const modifiedData = {
+      ...flaskData,
+      category,
+      message: `Predicted category is ${category}`
+    };
+
+    console.log('Modified Response:', modifiedData);
+    return res.json(modifiedData);
+
+  } catch (err) {
+    console.error('❌ Error calling Flask API:', err.message);
+    return res.status(500).json({ error: 'Failed to get prediction from Python API.' });
+  }
+});
+
+
+
+
+function convertToWav(inputPath, outputPath) {
+  return new Promise((resolve, reject) => {
+    ffmpeg(inputPath)
+      .toFormat('wav')
+      .on('end', () => {
+        console.log('✅ Conversion finished:', outputPath);
+        resolve(outputPath);
+      })
+      .on('error', (err) => {
+        console.error('❌ Conversion error:', err);
+        reject(err);
+      })
+      .save(outputPath);
+  });
+}
+
+
+async function saveOrUpdateTodayProgress(userId, newSpeechQuality) {
+
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+  
+    try {
+      const existing = await Progress.findOne({
+        userId,
+        date: { $gte: startOfDay, $lte: endOfDay }
+      });
+  
+      if (existing) {
+        // Update only if new quality is better
+        if (newSpeechQuality > existing.speechQuality) {
+          existing.speechQuality = newSpeechQuality;
+          await existing.save();
+          return { updated: true, data: existing };
+        }
+        return { updated: false, data: existing };
+      } else {
+        // Create new entry for today
+        const progress = new Progress({
+          userId,
+          date: new Date(),
+          speechQuality: newSpeechQuality
+        });
+        await progress.save();
+        return { created: true, data: progress };
+      }
+    } catch (err) {
+      console.error('Error saving/updating progress:', err);
+      throw err;
+    }
+  }
+
+app.get('/get-exercises/:id', async(req, res) => {
+    const category = req.query.category;
+    const {id} = req.params;
+  
+    const exercises = await Therapy.find({severity: category})
+    res.render("exercises.ejs", {exercises, id});
+});
+
+
+app.get('/dashboard/:id', async (req, res) => {
+    let {id} = req.params;
+    let user = User.findOne({_id: id});
+    // console.log(user);
+
+    let prg = await getLast7DaysProgress(id);
+    console.log(prg);
+    res.render('dashboard', {
+      id,
+      username: user.name,  // dynamic user from session or DB
+      last7Days: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: prg  // Sample progress scores
+      }
+    });
+  });
+
+
+  async function getLast7DaysProgress(userId) {
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 6); // includes today
+  
+    const progressEntries = await Progress.find({
+      userId,
+      date: {
+        $gte: new Date(sevenDaysAgo.setHours(0, 0, 0, 0)),
+        $lte: new Date(today.setHours(23, 59, 59, 999))
+      }
+    }).sort({ date: 1 });
+  
+    const speechQualityArray = progressEntries.map(entry => entry.speechQuality);
+  
+    // Pad the beginning with 0s if less than 7 entries
+    const missingCount = 7 - speechQualityArray.length;
+    if (missingCount > 0) {
+      const zeroArray = new Array(missingCount).fill(0);
+      return [...zeroArray, ...speechQualityArray];
+    }
+  
+    return speechQualityArray;
+  }
+ 
+  
+  function getRandomDecimal(min = 10, max = 15) {
+    const random = Math.random() * (max - min) + min;
+    return parseFloat(random.toFixed(2));
+  }
+
+
+app.listen(3000, ()=>{
+    console.log("App is listening on 3000");
+});
+

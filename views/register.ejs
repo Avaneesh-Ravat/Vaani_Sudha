@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Vaani Sudha</title>
+    <link rel="stylesheet" href="/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="left-section">
+            <img src="/images/fluent-conversation-signin.webp" alt="3D Design">
+        </div>
+
+        <div class="right-section">
+            <div class="login-box">
+                <h2>Welcome To <strong>Vaani Sudha</strong></h2>
+
+                <h3>Register to start</h3>
+
+                <form action="/register" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <div class="input-box">
+                            <i class="fa fa-user"></i>
+                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-box">
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-box">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" id="password" name="password" required placeholder="Create a password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact">Contact Number</label>
+                        <div class="input-box">
+                            <i class="fa fa-phone"></i>
+                            <input type="tel" id="contact" name="contact" required placeholder="Enter your contact number">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <div class="input-box">
+                            <i class="fa fa-calendar"></i>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <div class="input-box">
+                            <i class="fa fa-venus-mars"></i>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="register-btn">Register</button>
+
+                    <p>Already have an account? <a href="/signin">Login here</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

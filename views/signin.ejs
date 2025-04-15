@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Vaani Sudha</title>
+    <link rel="stylesheet" href="/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="left-section">
+            <img src="/images/fluent-conversation-signin.webp" alt="3D Design">
+        </div>
+
+        <div class="right-section">
+            <div class="login-box">
+                <h2>Welcome To <strong>Vaani Sudha</strong></h2>
+
+                <form action="/signin" method="POST">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-box">
+                            <i class="fa fa-envelope"></i>
+                            <input type="email" id="email" name="email" required placeholder="Enter your Email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-box">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" id="password" name="password" required placeholder="Enter your Password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn">Login</button>
+
+                    <p>Don't have an account? <a href="/register">Create here</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

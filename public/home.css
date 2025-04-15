@@ -1,0 +1,27 @@
+.container{
+    /* background-color: #b6e6de; */
+    margin: 1rem;
+    padding: 0.5rem;
+}
+
+.container h1{
+    text-align: center;
+    margin: 0.5rem;
+}
+
+.container .content h2{
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.content p{
+    font-size: 1.25rem;
+}
+
+.footer{
+    background-color: #1e2020;
+    height: 6rem;
+}
+
+
+

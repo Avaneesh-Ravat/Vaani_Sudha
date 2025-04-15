@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exercises</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fdf3e4;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    nav a {
+      margin: 0 10px;
+      text-decoration: underline;
+      color: black;
+      font-weight: 500;
+    }
+
+    .profile-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .exercise-container {
+      max-width: 700px;
+      margin: 20px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .step {
+      margin-bottom: 12px;
+      padding: 12px;
+      border-left: 4px solid #4caf50;
+      background: #f0fef4;
+      border-radius: 6px;
+    }
+
+    .step-number {
+      font-weight: bold;
+      color: #388e3c;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 30px auto 10px;
+      width: fit-content;
+      padding: 10px 20px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .back-btn:hover {
+      background: #125ea2;
+    }
+  </style>
+</head>
+<body>
+
+    <header>
+        <h2>Vaani Sudha</h2>
+        <div>
+          <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+          </nav>
+        </div>
+        <div class="profile-icon">👤</div>
+      </header>
+  <% exercises.forEach((exercise, exIndex) => { %>
+    <div class="exercise-container">
+      <h1><%= exercise.therapyName %></h1>
+
+      <% exercise.steps.forEach((step, index) => { %>
+        <div class="step">
+          <div class="step-number">Step <%= index + 1 %>:</div>
+          <div><%= step %></div>
+        </div>
+      <% }) %>
+    </div>
+  <% }) %>
+
+  <form action="/dashboard/<%=id%>">
+    <button class="back-btn">← Back to Dashboard</button>
+  </form>
+
+</body>
+</html>

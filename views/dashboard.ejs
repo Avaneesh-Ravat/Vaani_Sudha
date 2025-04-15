@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fdf3e4;
+    }
+    header {
+      background-color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    nav a {
+      margin: 0 10px;
+      text-decoration: underline;
+      color: black;
+      font-weight: 500;
+    }
+
+    .profile-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+    .content {
+      padding: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+    }
+    .charts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .chart-container {
+      flex: 1;
+      min-width: 300px;
+    }
+    .btn-analyze {
+      background-color: #28a745;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .btn-analyze:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+    <header>
+        <h2>Vaani Sudha</h2>
+        <div>
+          <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+          </nav>
+        </div>
+        <div class="profile-icon">👤<%= id %></div>
+    </header>
+
+  <div class="content">
+    
+
+    <div class="chart-container" style="width: 100%; max-width: 500px; margin: auto;">
+        <h3>Last 7 Days Progress</h3>
+        <canvas id="progressChart" style="max-height: 300px;"></canvas>
+    </div>
+      
+
+    <div class="card">
+      <h3>Voice Analysis</h3>
+      <p>Click the button below to analyze your voice.</p>
+      <form action="/speech-analysis/<%= id %>" method="get">
+        <button class="btn-analyze">Analyze Voice</button>
+      </form> 
+    </div>
+
+  </div>
+
+  <script>
+    // Progress Chart
+    const progressCtx = document.getElementById('progressChart').getContext('2d');
+    const progressChart = new Chart(progressCtx, {
+      type: 'line',
+      data: {
+        labels: <%- JSON.stringify(last7Days.labels) %>,
+        datasets: [{
+          label: 'Progress Score',
+          data: <%- JSON.stringify(last7Days.data) %>,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      }
+    });
+
+  </script>
+</body>
+</html>
