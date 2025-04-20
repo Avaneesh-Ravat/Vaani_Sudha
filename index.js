@@ -118,53 +118,41 @@ const upload = multer({ storage: storage });
 
 // Route to receive audio and forward to Flask
 app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
-  let {id} = req.params;
-  if (!req.file) {
-    console.error('❌ No file received'); 
-    return res.status(400).json({ error: 'No audio file uploaded.' });
-  }
-
-  console.log('✅ Audio saved:', req.file.path);
+  let { id } = req.params;
+  if (!req.file) return res.status(400).json({ error: 'No audio file uploaded.' });
 
   try {
     const originalPath = req.file.path;
     const wavPath = path.join(path.dirname(originalPath), path.basename(originalPath, path.extname(originalPath)) + '.wav');
 
-    // Convert webm to wav
     await convertToWav(originalPath, wavPath);
 
-    // Prepare FormData for Flask
     const formData = new FormData();
     formData.append('audio', fs.createReadStream(wavPath));
-    // console.log(formData);
 
-    // Send POST to Flask API
     const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
       headers: formData.getHeaders()
     });
 
     const flaskData = response.data;
+    console.log("Flask data:", flaskData); // ✅ graphUrl should be here
 
-    // Now compute category here in Node.js
     const yesPercent = flaskData['Yes (%)'];
+    if (yesPercent < 10) flaskData['Yes (%)'] = getRandomDecimal();
 
-    if (yesPercent < 10) {
-      flaskData['Yes (%)'] = getRandomDecimal(); // Overwrite with random value
-    }
+    let category = 'high';
+    if (yesPercent < 33) category = 'low';
+    else if (yesPercent < 66) category = 'med';
 
-    let category = 'low';
-    if (yesPercent > 66) category = 'med';
-    else if (yesPercent > 33) category = 'high';
-
-    saveOrUpdateTodayProgress(id, 100-yesPercent);
+    saveOrUpdateTodayProgress(id, 100 - yesPercent);
 
     const modifiedData = {
       ...flaskData,
       category,
-      message: `Predicted category is ${category}`
+      message: `Predicted category is ${category}`,
+      graphUrl: flaskData.graphUrl // ✅ add this
     };
 
-    console.log('Modified Response:', modifiedData);
     return res.json(modifiedData);
 
   } catch (err) {
@@ -172,6 +160,7 @@ app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
     return res.status(500).json({ error: 'Failed to get prediction from Python API.' });
   }
 });
+
 
 
 
@@ -232,8 +221,9 @@ async function saveOrUpdateTodayProgress(userId, newSpeechQuality) {
 app.get('/get-exercises/:id', async(req, res) => {
     const category = req.query.category;
     const {id} = req.params;
-  
-    const exercises = await Therapy.find({severity: category})
+    console.log(category);
+    const exercises = await Therapy.find({severity: category});
+    console.log(exercises);
     res.render("exercises.ejs", {exercises, id});
 });
 

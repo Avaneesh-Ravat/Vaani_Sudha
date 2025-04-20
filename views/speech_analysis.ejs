@@ -129,7 +129,7 @@
       padding: 15px;
       border-radius: 10px;
       margin-bottom: 20px;
-      height: 150px;
+      height: 250px;
       box-shadow: 3px 5px 0px #444;
     }
 
@@ -262,27 +262,69 @@
       });
 
       const data = await res.json();
-      category = data["category"]; // Set global variable
+      category = data["category"]; // global
 
       if (data.error) {
         setTimeout(() => {
           resultDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-        }, 5000); // Show error after 5 seconds
+        }, 5000);
       } else {
-        setTimeout(() => {
-          resultDiv.innerHTML = `
-            <p><strong>Yes (Stutter):</strong> ${data["Yes (%)"]}%<br>
-            <strong>No:</strong> ${data["No (%)"]}%<br>
-            <strong>Category:</strong> ${data["category"]}</p>`;
-        }, 5000); // Show result after 5 seconds
+        // Start staged graph display
+        showGraphsInSequence(data);
       }
     } catch (err) {
       console.log(err);
       setTimeout(() => {
         resultDiv.innerHTML = `<p style="color:red;">Server error. Please try again.</p>`;
-      }, 5000); // Show error after 5 seconds
+      }, 5000);
     }
   });
+
+  function showGraphsInSequence(data) {
+    resultDiv.innerHTML = '';
+
+    const steps = [
+      {
+        heading: "Analyzing Sound Waves Through Time ....",
+        image: data.waveformUrl
+      },
+      {
+        heading: "Analyzing Audio Signals with Spectrograms ....",
+        image: data.spectrogramUrl
+      },
+      {
+        heading: "Examining Pitch Contours in Sound ....",
+        image: data.pitchContourUrl
+      }
+    ];
+
+    let delay = 0;
+
+    steps.forEach((step, index) => {
+      setTimeout(() => {
+        resultDiv.innerHTML = `<h4>${step.heading}</h4><div class="loader"></div>`;
+      }, delay);
+
+      delay += 5000;
+
+      setTimeout(() => {
+        resultDiv.innerHTML = `
+          <h4>${step.heading}</h4>
+          <img src="${step.image}" width="300" style="margin-bottom: 20px;" />
+        `;
+      }, delay);
+
+      delay += 5000;
+    });
+
+    // Final result
+    setTimeout(() => {
+      resultDiv.innerHTML = `
+        <p><strong>Yes (Stutter):</strong> ${data["Yes (%)"]}%<br>
+        <strong>Category:</strong> ${data["category"]}</p>
+      `;
+    }, delay);
+  }
 
     // ✅ Bind the button once, then check category inside
     exerciseBtn.addEventListener('click', async () => {
