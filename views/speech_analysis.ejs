@@ -4,170 +4,28 @@
   <meta charset="UTF-8">
   <title>Vaani Sudha - Voice Recorder</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fdf3e4;
-    }
-
-    header {
-      background-color: #fff;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #ccc;
-    }
-
-    header h2 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    nav a {
-      margin: 0 10px;
-      text-decoration: underline;
-      color: black;
-      font-weight: 500;
-    }
-
-    .profile-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 18px;
-    }
-
-    .container {
-      display: flex;
-      justify-content: space-around;
-      margin: 40px;
-      flex-wrap: wrap;
-    }
-
-    .left-section, .right-section {
-      background-color: #fff4e5;
-      border-radius: 10px;
-      padding: 20px;
-      /* box-shadow: 3px 5px 0px #444; */
-    }
-
-    .left-section {
-      width: 45%;
-    }
-
-    .right-section {
-      width: 40%;
-    }
-
-    .story-box {
-      border: 2px solid #000;
-      border-radius: 10px;
-      padding: 15px;
-      height: 180px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      background: white;
-    }
-
-    .toggle-record {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: white;
-      border: 2px solid #000;
-      border-radius: 15px;
-      padding: 10px 20px;
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 10px;
-      box-shadow: 3px 5px 0px #444;
-    }
-
-    .toggle-switch {
-      width: 50px;
-      height: 28px;
-      background-color: #48c774; /* green */
-      border-radius: 15px;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .toggle-switch::before {
-      content: "";
-      width: 20px;
-      height: 20px;
-      background-color: white;
-      border-radius: 50%;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      transition: 0.3s;
-    }
-
-    .toggle-switch.active::before {
-      left: 26px;
-    }
-
-    .analyze-btn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border: 2px solid black;
-      border-radius: 10px;
-      font-weight: 600;
-      background: white;
-      cursor: pointer;
-    }
-
-    .status-box {
-      background-color: #ffffff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      height: 250px;
-      box-shadow: 3px 5px 0px #444;
-    }
-
-    .exercise-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #fff7e0;
-      padding: 15px 20px;
-      font-weight: bold;
-      border-radius: 10px;
-      box-shadow: 3px 5px 0px #444;
-      cursor: pointer;
-    }
-
-    .exercise-btn i {
-      font-weight: bold;
-    }
-
-    audio {
-      margin-top: 10px;
-    }
-
-    .loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #000000;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: 10px auto;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
+    /* (Same CSS as your original file) */
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #fdf3e4; }
+    header { background-color: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+    header h2 { margin: 0; font-size: 22px; }
+    nav a { margin: 0 10px; text-decoration: underline; color: black; font-weight: 500; }
+    .profile-icon { width: 30px; height: 30px; border-radius: 50%; background: black; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
+    .container { display: flex; justify-content: space-around; margin: 40px; flex-wrap: wrap; }
+    .left-section, .right-section { background-color: #fff4e5; border-radius: 10px; padding: 20px; }
+    .left-section { width: 45%; }
+    .right-section { width: 40%; }
+    .story-box { border: 2px solid #000; border-radius: 10px; padding: 15px; height: 180px; overflow-y: auto; margin-bottom: 20px; background: white; }
+    .toggle-record { display: flex; align-items: center; justify-content: space-between; background-color: white; border: 2px solid #000; border-radius: 15px; padding: 10px 20px; font-weight: bold; font-size: 18px; margin-top: 10px; box-shadow: 3px 5px 0px #444; }
+    .toggle-switch { width: 50px; height: 28px; background-color: #48c774; border-radius: 15px; position: relative; cursor: pointer; }
+    .toggle-switch::before { content: ""; width: 20px; height: 20px; background-color: white; border-radius: 50%; position: absolute; top: 4px; left: 4px; transition: 0.3s; }
+    .toggle-switch.active::before { left: 26px; }
+    .analyze-btn { margin-top: 15px; padding: 10px 20px; border: 2px solid black; border-radius: 10px; font-weight: 600; background: white; cursor: pointer; }
+    .status-box { background-color: #ffffff; padding: 15px; border-radius: 10px; margin-bottom: 20px; height: 250px; box-shadow: 3px 5px 0px #444; }
+    .exercise-btn { display: flex; align-items: center; justify-content: space-between; background-color: #fff7e0; padding: 15px 20px; font-weight: bold; border-radius: 10px; box-shadow: 3px 5px 0px #444; cursor: pointer; }
+    .exercise-btn i { font-weight: bold; }
+    audio { margin-top: 10px; }
+    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #000000; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -180,7 +38,6 @@
         <a href="#">Contact</a>
       </nav>
     </div>
-    <div class="profile-icon">👤</div>
   </header>
 
   <div class="container">
@@ -218,130 +75,144 @@
     let mediaRecorder;
     let audioChunks = [];
     let audioBlob;
-    let category = null; // ⬅️ Move to global scope
-
+    let category = null;
+  
+    let recognition;
+    let recognizing = false;
+    let wordSpans;
+    let currentWordIndex = 0; // NEW: Track current word index
+  
     const toggleSwitch = document.getElementById('recordToggle');
     const uploadBtn = document.getElementById('uploadBtn');
     const audioPlayer = document.getElementById('audioPlayer');
     const resultDiv = document.getElementById('result');
     const exerciseBtn = document.getElementById('exerciseBtn');
-
+  
+    const storyBox = document.querySelector('.story-box');
+    const originalText = storyBox.innerText.trim();
+    const words = originalText.split(' ').map(word => `<span>${word}</span>`).join(' ');
+    storyBox.innerHTML = words;
+  
     toggleSwitch.addEventListener('click', async () => {
-    toggleSwitch.classList.toggle('active');
+      toggleSwitch.classList.toggle('active');
+  
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+          if (recognition && recognizing) recognition.stop();
+          return;
+      }
+  
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+  
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+          audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          audioPlayer.src = audioUrl;
+          uploadBtn.style.display = 'inline-block';
+      };
+  
+      mediaRecorder.start();
+  
+      wordSpans = document.querySelectorAll('.story-box span');
+      wordSpans.forEach(span => { span.style.fontWeight = 'normal'; });
+      currentWordIndex = 0;
+  
+      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = true;
+  
+      recognition.onstart = () => recognizing = true;
+      recognition.onend = () => recognizing = false;
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join(' ')
+          .toLowerCase()
+          .trim();
 
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.stop();
-        return;
-    }
-
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    audioChunks = [];
-
-    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-    mediaRecorder.onstop = () => {
-        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        audioPlayer.src = audioUrl;
-        uploadBtn.style.display = 'inline-block';
-    };
-
-    mediaRecorder.start();
+        boldNextWord(transcript);
+      };
+ 
+  
+      recognition.start();
     });
 
+  
     uploadBtn.addEventListener('click', async () => {
-    resultDiv.innerHTML = `<div class="loader"></div>`; // Show loader
-
-    const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.webm');
-
-    try {
-      const res = await fetch('/send-audio/<%= id %>', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
-      category = data["category"]; // global
-
-      if (data.error) {
-        setTimeout(() => {
-          resultDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-        }, 5000);
-      } else {
-        // Start staged graph display
-        showGraphsInSequence(data);
+      resultDiv.innerHTML = `<div class="loader"></div>`;
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+  
+      try {
+        const res = await fetch('/send-audio/<%= id %>', { method: 'POST', body: formData });
+        const data = await res.json();
+        category = data["category"];
+  
+        if (data.error) {
+          setTimeout(() => { resultDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`; }, 5000);
+        } else {
+          showGraphsInSequence(data);
+        }
+      } catch (err) {
+        console.log(err);
+        setTimeout(() => { resultDiv.innerHTML = `<p style="color:red;">Server error. Please try again.</p>`; }, 5000);
       }
-    } catch (err) {
-      console.log(err);
-      setTimeout(() => {
-        resultDiv.innerHTML = `<p style="color:red;">Server error. Please try again.</p>`;
-      }, 5000);
-    }
-  });
-
-  function showGraphsInSequence(data) {
-    resultDiv.innerHTML = '';
-
-    const steps = [
-      {
-        heading: "Analyzing Sound Waves Through Time ....",
-        image: data.waveformUrl
-      },
-      {
-        heading: "Analyzing Audio Signals with Spectrograms ....",
-        image: data.spectrogramUrl
-      },
-      {
-        heading: "Examining Pitch Contours in Sound ....",
-        image: data.pitchContourUrl
-      }
-    ];
-
-    let delay = 0;
-
-    steps.forEach((step, index) => {
-      setTimeout(() => {
-        resultDiv.innerHTML = `<h4>${step.heading}</h4><div class="loader"></div>`;
-      }, delay);
-
-      delay += 5000;
-
-      setTimeout(() => {
-        resultDiv.innerHTML = `
-          <h4>${step.heading}</h4>
-          <img src="${step.image}" width="300" style="margin-bottom: 20px;" />
-        `;
-      }, delay);
-
-      delay += 5000;
     });
-
-    // Final result
-    setTimeout(() => {
-      resultDiv.innerHTML = `
-        <p><strong>Yes (Stutter):</strong> ${data["Yes (%)"]}%<br>
-        <strong>Category:</strong> ${data["category"]}</p>
-      `;
-    }, delay);
-  }
-
-    // ✅ Bind the button once, then check category inside
+  
+    function showGraphsInSequence(data) {
+      resultDiv.innerHTML = '';
+      const steps = [
+        { heading: "Analyzing Sound Waves Through Time ....", image: data.waveformUrl },
+        { heading: "Analyzing Audio Signals with Spectrograms ....", image: data.spectrogramUrl },
+        { heading: "Examining Pitch Contours in Sound ....", image: data.pitchContourUrl }
+      ];
+  
+      let delay = 0;
+  
+      steps.forEach((step, index) => {
+        setTimeout(() => { resultDiv.innerHTML = `<h4>${step.heading}</h4><div class="loader"></div>`; }, delay);
+        delay += 5000;
+        setTimeout(() => {
+          resultDiv.innerHTML = `<h4>${step.heading}</h4><img src="${step.image}" width="300" style="margin-bottom: 20px;" />`;
+        }, delay);
+        delay += 5000;
+      });
+  
+      setTimeout(() => {
+        resultDiv.innerHTML = `<p><strong>Yes (Stutter):</strong> ${data["Yes (%)"]}%<br><strong>Category:</strong> ${data["category"]}</p>`;
+      }, delay);
+    }
+  
     exerciseBtn.addEventListener('click', async () => {
-    if (category == null) {
+      if (category == null) {
         alert("Please analyze your audio first.");
         return;
-    }
-
-    try {
+      }
+      try {
         window.location.href = `/get-exercises/<%= id %>?category=${encodeURIComponent(category)}`;
-
-    } catch (err) {
+      } catch (err) {
         alert("Failed to fetch exercises.");
-    }
+      }
     });
+  
+    let lastBoldTime = 0;
+    const boldDelay = 250; // milliseconds between bolding words
 
-
+    function boldNextWord(transcript) {
+      const now = Date.now();
+      
+      if (currentWordIndex < wordSpans.length && now - lastBoldTime >= boldDelay) {
+        wordSpans[currentWordIndex].style.fontWeight = 'bold';
+        currentWordIndex++;
+        lastBoldTime = now;
+      }
+    }
   </script>
-</body>
+  </body>
 </html>

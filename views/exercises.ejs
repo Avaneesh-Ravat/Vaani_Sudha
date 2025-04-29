@@ -88,6 +88,17 @@
     .back-btn:hover {
       background: #125ea2;
     }
+
+    .btn-analyze {
+      background-color: #28a745;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -101,7 +112,6 @@
             <a href="#">Contact</a>
           </nav>
         </div>
-        <div class="profile-icon">👤</div>
       </header>
   <% exercises.forEach((exercise, exIndex) => { %>
     <div class="exercise-container">
@@ -113,6 +123,9 @@
           <div><%= step %></div>
         </div>
       <% }) %>
+      <form action="/speech-analysis/<%= id %>" method="get">
+        <button class="btn-analyze">Analyze Voice</button>
+      </form> 
     </div>
   <% }) %>
 

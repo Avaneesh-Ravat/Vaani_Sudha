@@ -229,47 +229,41 @@ app.get('/get-exercises/:id', async(req, res) => {
 
 
 app.get('/dashboard/:id', async (req, res) => {
-    let {id} = req.params;
-    let user = User.findOne({_id: id});
-    // console.log(user);
+  let { id } = req.params;
+  let user = await User.findOne({ _id: id });
 
-    let prg = await getLast7DaysProgress(id);
-    console.log(prg);
-    res.render('dashboard', {
-      id,
-      username: user.name,  // dynamic user from session or DB
-      last7Days: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        data: prg  // Sample progress scores
-      }
-    });
+  let { labels, data } = await getLast7ProgressWithDates(id);
+
+  res.render('dashboard', {
+    id,
+    username: user.name,
+    last7Days: {
+      labels,  // Now actual dates like ['14 Apr', '15 Apr', ...]
+      data     // Corresponding speechQuality scores
+    }
+  });
+});
+
+async function getLast7ProgressWithDates(userId) {
+  const progressEntries = await Progress.find({ userId })
+    .sort({ date: -1 })   // Get latest entries first
+    .limit(7);
+
+  const reversed = progressEntries.reverse();  // So oldest appears first
+
+  const labels = reversed.map(entry => {
+    const date = new Date(entry.date);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short'
+    }); // "20 Apr"
   });
 
+  const data = reversed.map(entry => entry.speechQuality);
 
-  async function getLast7DaysProgress(userId) {
-    const today = new Date();
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(today.getDate() - 6); // includes today
-  
-    const progressEntries = await Progress.find({
-      userId,
-      date: {
-        $gte: new Date(sevenDaysAgo.setHours(0, 0, 0, 0)),
-        $lte: new Date(today.setHours(23, 59, 59, 999))
-      }
-    }).sort({ date: 1 });
-  
-    const speechQualityArray = progressEntries.map(entry => entry.speechQuality);
-  
-    // Pad the beginning with 0s if less than 7 entries
-    const missingCount = 7 - speechQualityArray.length;
-    if (missingCount > 0) {
-      const zeroArray = new Array(missingCount).fill(0);
-      return [...zeroArray, ...speechQualityArray];
-    }
-  
-    return speechQualityArray;
-  }
+  return { labels, data };
+}
+
  
   
   function getRandomDecimal(min = 10, max = 15) {
