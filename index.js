@@ -89,10 +89,13 @@ async function getStory() {
     }
 }
 
+let story;
 // Render the homepage with a short story
 app.get("/speech-analysis/:id", async (req, res) => {
     const {id} = req.params;
-    const story = await getStory();
+    story = await getStory();
+    story = story.split(" ").slice(0, 80).join(" ");
+
     res.render("speech_analysis.ejs", { id, story, result: null });
 });
 
@@ -129,6 +132,7 @@ app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
 
     const formData = new FormData();
     formData.append('audio', fs.createReadStream(wavPath));
+    formData.append('referenceTxt', story);
 
     const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
       headers: formData.getHeaders()

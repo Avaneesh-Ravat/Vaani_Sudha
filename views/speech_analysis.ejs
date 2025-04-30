@@ -22,11 +22,21 @@
     .toggle-switch.active::before { left: 26px; }
     .analyze-btn { margin-top: 15px; padding: 10px 20px; border: 2px solid black; border-radius: 10px; font-weight: 600; background: white; cursor: pointer; }
     .status-box { background-color: #ffffff; padding: 15px; border-radius: 10px; margin-bottom: 20px; height: 250px; box-shadow: 3px 5px 0px #444; }
-    .exercise-btn { display: flex; align-items: center; justify-content: space-between; background-color: #fff7e0; padding: 15px 20px; font-weight: bold; border-radius: 10px; box-shadow: 3px 5px 0px #444; cursor: pointer; }
+    .exercise-btn, .pronounce-btn { display: flex; align-items: center; justify-content: space-between; background-color: #fff7e0; padding: 15px 20px; font-weight: bold; border-radius: 10px; box-shadow: 3px 5px 0px #444; cursor: pointer; margin-bottom: 0.5rem;}
     .exercise-btn i { font-weight: bold; }
     #recording-indicator{
       color: red;
     }
+    .pronounce-box {
+      border: 2px solid #000;
+      border-radius: 10px;
+      padding: 15px;
+      height: 180px;
+      overflow-y: auto;
+      background: white;
+      margin-top: 1rem;
+    }
+
     audio { margin-top: 10px; }
     .loader { border: 4px solid #f3f3f3; border-top: 4px solid #000000; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -73,6 +83,13 @@
       <div class="exercise-btn" id="exerciseBtn">
         Suggested Exercises
         <span>➡️</span>
+      </div>
+
+      <div class="pronounce-box">
+        <h3>Your pronounciation:</h3>
+        <div id="pronounce">
+          
+        </div>
       </div>
     </div>
   </div>
@@ -195,6 +212,11 @@
   
       setTimeout(() => {
         resultDiv.innerHTML = `<p><strong>Yes (Stutter):</strong> ${data["Yes (%)"]}%<br><strong>Category:</strong> ${data["category"]}</p>`;
+          // Render pronunciation feedback
+          // console.log(data.comparison)
+        if (data.comparison) {
+          renderPronounceBox(data.comparison);
+        }
       }, delay);
     }
   
@@ -222,6 +244,26 @@
         lastBoldTime = now;
       }
     }
+
+    function renderPronounceBox(comparisonArray) {
+      const pronounceDiv = document.getElementById("pronounce");
+      pronounceDiv.innerHTML = ''; // Clear previous content
+
+      comparisonArray.forEach(item => {
+        const span = document.createElement("span");
+        span.innerText = item.word + ' ';
+        console.log(item.type);
+        if (item.type === 'match') {
+          span.style.color = 'green';
+        } else if (item.type === 'replace') {
+          span.style.color = 'red';
+        } else if (item.type === 'missing') {
+          span.style.color = 'gray';
+        }
+        pronounceDiv.appendChild(span);
+      });
+    }
+
   </script>
   </body>
 </html>

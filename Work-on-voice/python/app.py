@@ -5,6 +5,9 @@ import librosa
 import librosa.display
 import os
 import matplotlib.pyplot as plt
+import difflib
+from faster_whisper import WhisperModel
+
 
 app = Flask(__name__)
 
@@ -16,12 +19,45 @@ with open('stutter_model_decision_tree', 'rb') as f:
 if not os.path.exists('static'):
     os.makedirs('static')
 
+
+
+def transcribe_and_compare(audio_path, reference_paragraph):
+    model = WhisperModel("base", device="cpu", compute_type="int8")
+    segments, _ = model.transcribe(audio_path)
+    spoken_text = " ".join([seg.text for seg in segments])
+
+    expected_words = reference_paragraph.lower().split()
+    spoken_words = spoken_text.lower().split()
+
+    matcher = difflib.SequenceMatcher(None, expected_words, spoken_words)
+
+    result = []
+
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag == 'equal':
+            for ew in expected_words[i1:i2]:
+                result.append({'type': 'match', 'word': ew})
+        elif tag == 'replace':
+            for ew, sw in zip(expected_words[i1:i2], spoken_words[j1:j2]):
+                result.append({'type': 'replace', 'expected': ew, 'word': sw})
+        elif tag == 'delete':
+            for ew in expected_words[i1:i2]:
+                result.append({'type': 'missing', 'expected': ew, 'word': ew})
+        elif tag == 'insert':
+            for sw in spoken_words[j1:j2]:
+                result.append({'type': 'extra', 'spoken': sw, 'word': sw})
+
+    return spoken_text, result
+
+
+
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'audio' not in request.files:
         return jsonify({'error': 'No audio file uploaded'}), 400
 
     audio_file = request.files['audio']
+    referenceTxt = request.form['referenceTxt']
     audio_path = 'temp_audio.mp3'
     audio_file.save(audio_path)
 
@@ -71,12 +107,16 @@ def predict():
         plt.savefig(pitch_path)
         plt.close()
 
+        spoken_text, comparison = transcribe_and_compare(audio_path, referenceTxt)
+
         return jsonify({
             'No (%)': round(no * 100, 2),
             'Yes (%)': round(yes * 100, 2),
             'waveformUrl': 'http://127.0.0.1:5000/static/waveform.png',
             'spectrogramUrl': 'http://127.0.0.1:5000/static/spectrogram.png',
-            'pitchContourUrl': 'http://127.0.0.1:5000/static/pitch_contour.png'
+            'pitchContourUrl': 'http://127.0.0.1:5000/static/pitch_contour.png',
+            'spoken_text': spoken_text,
+            'comparison': comparison
         })
 
     except Exception as e:
