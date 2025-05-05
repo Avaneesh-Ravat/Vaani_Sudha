@@ -47,16 +47,17 @@ app.get("/register", (req, res)=>{
     res.render("register.ejs");
 });
 
-app.post('/register', async(req, res)=>{
-    // console.log(req.body);
-    let {name, email, password, contact, dob, gender} = req.body;
-    const newUser = new User({name, email, password, contact, dob, gender});
+app.post('/register', async (req, res) => {
+  console.log(req.body);
+  let { name, email, password, contact, dob, gender } = req.body;
+  const newUser = new User({ name, email, password, contact, dob, gender });
 
-    await newUser.save();
-    const user = await User.findOne({email});
-    res.redirect(`/dashboard/${user._id}`);
-
+  await newUser.save();
+  const user = await User.findOne({ email });
+  res.redirect(`/dashboard/${user._id}`);
+  
 });
+
 
 app.get("/signin", (req, res)=>{
     res.render("signin.ejs", {message: ""});

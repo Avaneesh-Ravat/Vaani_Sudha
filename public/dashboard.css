@@ -1,0 +1,155 @@
+/* Reset and Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fdf3e4;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  /* Header */
+  header {
+    background-color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  
+  header h2 {
+    font-size: 24px;
+    /* flex: 1 1 100%; */
+    margin-bottom: 10px;
+  }
+  
+  nav {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  nav a {
+    color: black;
+    font-size: 20px;
+    transition: color 0.3s ease;
+  }
+  
+  nav a:hover {
+    color: #28a745;
+  }
+  
+  
+  /* Content Area */
+  .content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Card */
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  /* Chart Container */
+  .chart-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .chart-container h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  /* Button */
+  .btn-analyze {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .btn-analyze:hover {
+    background-color: #218838;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    header h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+  
+    nav {
+      flex-direction: row;
+      gap: 10px;
+    }
+  
+    .chart-container h3,
+    .card h3 {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    header h2 {
+      font-size: 20px;
+      text-align: center;
+    }
+  
+    nav {
+      /* flex-direction: column; */
+      align-items: center;
+      width: 100%;
+    }
+  
+    nav a {
+      margin: 5px 0;
+    }
+  
+    .chart-container,
+    .card {
+      padding: 15px;
+    }
+  
+    .btn-analyze {
+      font-size: 16px;
+      padding: 12px;
+    }
+  }
+  
