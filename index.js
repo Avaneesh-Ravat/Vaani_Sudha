@@ -334,7 +334,7 @@ app.get('/progress30/:id', async (req, res) => {
 
   let { labels, data } = await getLast30ProgressWithDates(id);
 
-  res.render('progress15', {
+  res.render('progress30', {
     id,
     username: user.name,
     last7Days: {
