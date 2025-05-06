@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vaani Sudha Feedback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdf3e4; /* Beige */
+      margin: 0;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(60, 179, 113, 0.2);
+      position: relative;
+    }
+
+    h2 {
+      color: #28a745;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #28a745;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #28a745;
+    }
+
+    .feedback-alert {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #dff0d8;
+      color: #3c763d;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Feedback Form</h2>
+    <form id="feedbackForm" action="/feedback/<%= id %>" method="POST">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">Your Feedback</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+    <div class="feedback-alert" id="feedbackAlert">✅ Feedback has been sent!<p>Redirecting to dashboard......</p></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('feedbackForm');
+    const alertBox = document.getElementById('feedbackAlert');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Stop default submit
+
+      // Show alert box
+      alertBox.style.display = 'block';
+
+      // Wait 1 second then submit the form
+      setTimeout(() => {
+        form.submit();
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

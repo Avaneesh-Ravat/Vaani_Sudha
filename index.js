@@ -7,6 +7,7 @@ const fs = require("fs");
 const User = require("./models/userSchema.js");
 const Therapy = require("./models/therapySchema.js");
 const Progress = require("./models/progress.js");
+const Feedback = require("./models/feedback.js")
 const LatestProgress = require("./models/latestProgress.js");
 const app = express();
 const FormData = require("form-data");
@@ -46,6 +47,7 @@ app.get("/", (req, res)=>{
 app.get("/about", (req, res)=>{
   res.render("about.ejs");
 });
+
 
 app.get("/register", (req, res)=>{
     res.render("register.ejs");
@@ -269,6 +271,26 @@ app.get('/dashboard/:id', async (req, res) => {
     }
   });
 });
+
+
+app.get("/feedback/:id", (req, res)=>{
+  
+  let { id } = req.params;
+  res.render("feedback.ejs", {id})
+
+})
+
+app.post("/feedback/:id", async (req, res) => {
+  let {id} = req.params;
+    const { name, email, message } = req.body;
+
+    const feedback = new Feedback({ name, email, message });
+    await feedback.save();
+
+    res.redirect(`/dashboard/${id}`);
+});
+
+
 
 async function getLast7ProgressWithDates(userId) {
   const progressEntries = await Progress.find({ userId })

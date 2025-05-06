@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
+
+    <div class="splash-overlay" id="splashScreen">
+        <video id="splashVideo" autoplay muted>
+          <source src="/images/splash.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button class="skip-btn" onclick="skipSplash()">Skip</button>
+    </div>
+
     <div class="login-container">
         <div class="left-section">
             <img src="/images/fluent-conversation-signin.webp" alt="3D Design">
@@ -17,7 +26,7 @@
             <div class="login-box">
                 <h2>Welcome To <strong>Vaani Sudha</strong></h2>
 
-                <form action="/signin" method="POST">
+                <form action="/signin" id="registerForm" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <div class="input-box">
@@ -42,4 +51,5 @@
         </div>
     </div>
 </body>
+<script src="/splash.js"></script>
 </html>
