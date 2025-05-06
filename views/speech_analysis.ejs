@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vaani Sudha - Voice Recorder</title>
   <link rel="stylesheet" href="/speech_analysis.css">
 </head>
 <body>
   <header>
-    <h2>Vaani Sudha</h2>
+    <div class="left-nav">
+      <img class="logo" src="/images/vaanisudha_logo.jpeg" alt="logo">
+      <h2>Vaani Sudha</h2>
+    </div>
     <div>
       <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+        <a href="/dashboard/<%= id %>">Home</a>
+        <a href="/about">About</a>
+        <a href="#">Feedback</a>
       </nav>
     </div>
   </header>
@@ -36,6 +40,13 @@
     </div>
 
     <div class="right-section">
+      <% if (lastResult) { %>
+        <div class="last-result">
+          <h3>Last result: </h3>
+          <h3 class="result"><%= lastResult.speechQuality %></h3>
+        </div>
+      <% } %>
+      
       <div class="status-box">
         <h3>Stutter in your voice:</h3>
         <div id="result">

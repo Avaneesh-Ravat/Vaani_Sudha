@@ -5,32 +5,47 @@ font-family: 'Segoe UI', sans-serif;
 background-color: #fdf3e4;
 }
 
+/* Header */
 header {
 background-color: #fff;
-padding: 15px 30px;
+padding: 15px 20px;
 display: flex;
 justify-content: space-between;
 align-items: center;
 border-bottom: 1px solid #ccc;
 flex-wrap: wrap;
+flex-direction: row;
+}
+.left-nav{
+    display: flex;
+}
+
+.logo{
+    width: 4rem;
+    border-radius: 50%;
+    margin-right: 2rem;
 }
 
 header h2 {
-margin: 0;
-font-size: 22px;
+font-size: 24px;
+/* flex: 1 1 100%; */
+margin-bottom: 10px;
 }
 
 nav {
 display: flex;
-gap: 10px;
+gap: 15px;
 flex-wrap: wrap;
-margin-top: 10px;
 }
 
 nav a {
-text-decoration: underline;
 color: black;
-font-weight: 500;
+font-size: 20px;
+transition: color 0.3s ease;
+}
+
+nav a:hover {
+color: #28a745;
 }
 
 .profile-icon {
@@ -190,6 +205,15 @@ animation: spin 1s linear infinite;
 margin: 10px auto;
 }
 
+.last-result{
+    display: flex;
+}
+
+.last-result .result{
+    color: red;
+    margin-left: 0.25rem;
+}
+
 @keyframes spin {
 0% {
     transform: rotate(0deg);
@@ -200,32 +224,5 @@ margin: 10px auto;
 }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-.container {
-    flex-direction: column;
-    margin: 20px;
-}
 
-.left-section,
-.right-section {
-    width: 100%;
-    max-width: 100%;
-}
-
-header {
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-nav {
-    justify-content: flex-start;
-    width: 100%;
-}
-
-.toggle-record {
-    flex-direction: column;
-    gap: 10px;
-}
-}
 

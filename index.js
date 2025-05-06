@@ -7,6 +7,7 @@ const fs = require("fs");
 const User = require("./models/userSchema.js");
 const Therapy = require("./models/therapySchema.js");
 const Progress = require("./models/progress.js");
+const LatestProgress = require("./models/latestProgress.js");
 const app = express();
 const FormData = require("form-data");
 const cors = require("cors");
@@ -42,6 +43,9 @@ app.get("/", (req, res)=>{
     res.render("home.ejs");
 });
 
+app.get("/about", (req, res)=>{
+  res.render("about.ejs");
+});
 
 app.get("/register", (req, res)=>{
     res.render("register.ejs");
@@ -96,9 +100,16 @@ app.get("/speech-analysis/:id", async (req, res) => {
     const {id} = req.params;
     story = await getStory();
     story = story.split(" ").slice(0, 80).join(" ");
+    lastResult = await getSpeechQualityById(id);
+    console.log(lastResult)
 
-    res.render("speech_analysis.ejs", { id, story, result: null });
+    res.render("speech_analysis.ejs", { id, story, result: null, lastResult });
 });
+
+
+async function getSpeechQualityById(userId) {
+  return await LatestProgress.findOne({ userId });
+}
 
 
 
@@ -150,6 +161,7 @@ app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
     else if (yesPercent < 66) category = 'med';
 
     saveOrUpdateTodayProgress(id, 100 - yesPercent);
+    saveOrUpdatelatest(id, yesPercent);
 
     const modifiedData = {
       ...flaskData,
@@ -185,6 +197,15 @@ function convertToWav(inputPath, outputPath) {
       .save(outputPath);
   });
 }
+
+async function saveOrUpdatelatest(userId, speechQuality) {
+  return await LatestProgress.findOneAndUpdate(
+    { userId },
+    { speechQuality },
+    { new: true, upsert: true }
+  );
+}
+
 
 
 async function saveOrUpdateTodayProgress(userId, newSpeechQuality) {
@@ -253,6 +274,81 @@ async function getLast7ProgressWithDates(userId) {
   const progressEntries = await Progress.find({ userId })
     .sort({ date: -1 })   // Get latest entries first
     .limit(7);
+
+  const reversed = progressEntries.reverse();  // So oldest appears first
+
+  const labels = reversed.map(entry => {
+    const date = new Date(entry.date);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short'
+    }); // "20 Apr"
+  });
+
+  const data = reversed.map(entry => entry.speechQuality);
+
+  return { labels, data };
+}
+
+app.get('/progress15/:id', async (req, res) => {
+  let { id } = req.params;
+  let user = await User.findOne({ _id: id });
+
+  let { labels, data } = await getLast15ProgressWithDates(id);
+
+  res.render('progress15', {
+    id,
+    username: user.name,
+    last7Days: {
+      labels,  // Now actual dates like ['14 Apr', '15 Apr', ...]
+      data     // Corresponding speechQuality scores
+    }
+  });
+});
+
+
+async function getLast15ProgressWithDates(userId) {
+  const progressEntries = await Progress.find({ userId })
+    .sort({ date: -1 })   // Get latest entries first
+    .limit(15);
+
+  const reversed = progressEntries.reverse();  // So oldest appears first
+
+  const labels = reversed.map(entry => {
+    const date = new Date(entry.date);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short'
+    }); // "20 Apr"
+  });
+
+  const data = reversed.map(entry => entry.speechQuality);
+
+  return { labels, data };
+}
+
+
+app.get('/progress30/:id', async (req, res) => {
+  let { id } = req.params;
+  let user = await User.findOne({ _id: id });
+
+  let { labels, data } = await getLast30ProgressWithDates(id);
+
+  res.render('progress15', {
+    id,
+    username: user.name,
+    last7Days: {
+      labels,  // Now actual dates like ['14 Apr', '15 Apr', ...]
+      data     // Corresponding speechQuality scores
+    }
+  });
+});
+
+
+async function getLast30ProgressWithDates(userId) {
+  const progressEntries = await Progress.find({ userId })
+    .sort({ date: -1 })   // Get latest entries first
+    .limit(30);
 
   const reversed = progressEntries.reverse();  // So oldest appears first
 
