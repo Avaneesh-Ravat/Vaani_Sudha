@@ -363,7 +363,7 @@ app.get('/progress30/:id', async (req, res) => {
       labels,  // Now actual dates like ['14 Apr', '15 Apr', ...]
       data     // Corresponding speechQuality scores
     }
-  });
+  });   
 });
 
 
@@ -395,7 +395,7 @@ async function getLast30ProgressWithDates(userId) {
   }
 
 
-app.listen(3000, ()=>{
+app.listen(3000, '0.0.0.0', ()=>{
     console.log("App is listening on 3000");
 });
 
