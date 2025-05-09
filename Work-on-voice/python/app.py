@@ -7,6 +7,10 @@ import os
 import matplotlib.pyplot as plt
 import difflib
 from faster_whisper import WhisperModel
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 
 app = Flask(__name__)
@@ -108,7 +112,6 @@ def predict():
         plt.close()
 
         spoken_text, comparison = transcribe_and_compare(audio_path, referenceTxt)
-
         return jsonify({
             'No (%)': round(no * 100, 2),
             'Yes (%)': round(yes * 100, 2),

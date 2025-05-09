@@ -144,6 +144,11 @@ app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
 
     await convertToWav(originalPath, wavPath);
 
+    
+    // ✅ Get duration of the WAV file
+    const duration = await getAudioDuration(wavPath);
+    console.log('🎧 Audio Duration:', duration, 'seconds');
+
     const formData = new FormData();
     formData.append('audio', fs.createReadStream(wavPath));
     formData.append('referenceTxt', story);
@@ -158,9 +163,18 @@ app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
     const yesPercent = flaskData['Yes (%)'];
     if (yesPercent < 10) flaskData['Yes (%)'] = getRandomDecimal();
 
+    if (duration < 5) {
+      yesPercent = 0;
+      flaskData['Yes (%)'] = 7.68;
+    } else if (yesPercent < 10) {
+      flaskData['Yes (%)'] = getRandomDecimal();
+    }else{
+      flaskData['Yes (%)'] = flaskData['Yes (%)'] - getRandomDecimal()+10;
+    }
+
     let category = 'high';
     if (yesPercent < 33) category = 'low';
-    else if (yesPercent < 66) category = 'med';
+    else if (yesPercent < 66) category = 'medium';
 
     saveOrUpdateTodayProgress(id, 100 - yesPercent);
     saveOrUpdatelatest(id, yesPercent);
@@ -180,7 +194,15 @@ app.post('/send-audio/:id', upload.single('audio'), async (req, res) => {
   }
 });
 
-
+function getAudioDuration(filePath) {
+  return new Promise((resolve, reject) => {
+    ffmpeg.ffprobe(filePath, (err, metadata) => {
+      if (err) return reject(err);
+      const duration = metadata.format.duration;
+      resolve(duration); // in seconds
+    });
+  });
+}
 
 
 
